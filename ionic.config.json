@@ -1,0 +1,7 @@
+{
+  "name": "salaru",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}
