@@ -25,7 +25,7 @@
             <ion-col col-4>
               <ion-item-group>
                 <ion-item-divider color="light">Items</ion-item-divider>
-                <ion-item *ngFor="let item of items" (click)="selectProduct(item)">{{item.Name}}</ion-item>
+                <ion-item *ngFor="let item of products" (click)="selectProduct(item)">{{item.Name}}</ion-item>
                 <!-- <ion-item>8R</ion-item>
                 <ion-item>12R</ion-item>
                 <ion-item>12x18</ion-item> -->
@@ -106,6 +106,7 @@
             <ion-col></ion-col>
             <ion-col >
                 <button  ion-button full (click)="removeitems()">Clear</button>
+               
             </ion-col>
           </ion-row>
           <ion-row>
@@ -140,6 +141,17 @@
             <ion-col>
               <h2>{{grandAmount + total }}  Rs</h2>
             </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+                <button  ion-button full (click)="discount()">Discount</button>                
+            </ion-col>
+            <ion-col>
+              <button  ion-button full (click)="SaveOrder()">Save</button>
+            </ion-col>
+            <ion-col>
+                <button  ion-button full (click)="Save()">Cancel</button>
+              </ion-col>
           </ion-row>
         </ion-grid>
       </ion-col>

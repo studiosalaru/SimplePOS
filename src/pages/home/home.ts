@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-
+import { Http, Headers, RequestOptions } from '@angular/http';
+import 'rxjs/add/operator/map';
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -105,20 +106,26 @@ export class HomePage {
   netamount = 0;
   grandAmount = 0;
   discountAmount = 0;
+  products;
 
-  constructor(public navCtrl: NavController) {
+  constructor(public navCtrl: NavController,private http: Http) {
     this.loaditems();
     this.selectCategory(1)
   }
   
   loaditems(){
+    this.http.get('http://localhost:4000/api/product').subscribe(result => {
+      console.log(result);
+      this.products = JSON.parse(result['_body']);
+      console.log(this.products);
+    })
   
   }
   selectProduct(item){
     console.log(item);
-      this.selectedProduct.productid = item.productid;
+      this.selectedProduct.productid = item._id;
       this.selectedProduct.name = item.Name;
-      this.selectedProduct.price = item.price;
+      this.selectedProduct.price = item.Price;
      // this.selectedProduct = item
   }
   selectCategory(categoryid){
@@ -144,5 +151,8 @@ export class HomePage {
   }
   deductTotal(value){
     this.total -= value;
+  }
+  SaveOrder(){
+      console.log(this.addeditems);
   }
 }
