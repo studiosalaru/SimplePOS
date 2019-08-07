@@ -116,7 +116,14 @@ export class HomePage {
   loaditems(){
     this.http.get('http://localhost:4000/api/product').subscribe(result => {
       console.log(result);
-      this.products = JSON.parse(result['_body']);
+      if(result.status == 200){
+      let prod = JSON.parse(result['_body']);
+        if(prod.IsSucess){
+          this.products  = prod.data;
+
+        }
+      }
+      
       console.log(this.products);
     })
   
@@ -126,6 +133,12 @@ export class HomePage {
       this.selectedProduct.productid = item._id;
       this.selectedProduct.name = item.Name;
       this.selectedProduct.price = item.Price;
+      this.netQty += 1;
+      this.addeditems.push(this.selectedProduct);
+      var balance = parseFloat(this.selectedProduct.price) ;
+      this.AddTotal(balance);
+      
+      this.selectedProduct = {'price':'',"qty":'',"name":'',"productid":''};
      // this.selectedProduct = item
   }
   selectCategory(categoryid){

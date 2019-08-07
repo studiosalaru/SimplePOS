@@ -83,6 +83,7 @@ export class ProductAddPage {
           }
           console.log(data['_body']);
         }, error => {
+          this.presentConfirm(error.message)
           console.log(error);
         });
     } else {
@@ -100,6 +101,7 @@ export class ProductAddPage {
           console.log(data['_body']);
         }, error => {
           console.log(error);
+          this.presentConfirm(error.message)
         });
     }
     this.loadallproduct();
@@ -108,7 +110,9 @@ export class ProductAddPage {
   loadallproduct() {
     this.http.get('http://localhost:4000/api/product').subscribe(result => {
       console.log(result);
-      this.products = JSON.parse(result['_body']);
+      if(result['_body']){
+        this.products = JSON.parse(result['_body']);
+      }
     })
   }
   newProdut() {

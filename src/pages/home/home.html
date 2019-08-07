@@ -22,13 +22,11 @@
             </ion-segment>
           </ion-row>
           <ion-row>
-            <ion-col col-4>
+            <!-- <ion-col col-4>
               <ion-item-group>
                 <ion-item-divider color="light">Items</ion-item-divider>
                 <ion-item *ngFor="let item of products" (click)="selectProduct(item)">{{item.Name}}</ion-item>
-                <!-- <ion-item>8R</ion-item>
-                <ion-item>12R</ion-item>
-                <ion-item>12x18</ion-item> -->
+               
               </ion-item-group>
             </ion-col>
             <ion-col>
@@ -63,17 +61,22 @@
                   </ion-col>
                 </ion-row>
               </ion-grid>
-            </ion-col>
-          </ion-row>
-          <ion-row>
+            </ion-col> -->
+
+
             <ion-col>
-              <button ion-button full (click)="additem()">Add</button>
+
+              <div class="square-container">
+                <div class="square" (click)="selectProduct(item)" *ngFor="let item of products">
+                  <div class="content">{{item.Name}}</div>
+                </div>
+
+                
+              </div>
             </ion-col>
-            <ion-col>
-             
-            </ion-col>
+
           </ion-row>
-        </ion-grid>
+         </ion-grid>
       </ion-col>
       <ion-col>
         <ion-grid>
@@ -104,9 +107,9 @@
           </ion-row>
           <ion-row>
             <ion-col></ion-col>
-            <ion-col >
-                <button  ion-button full (click)="removeitems()">Clear</button>
-               
+            <ion-col>
+              <button ion-button full (click)="removeitems()">Clear</button>
+
             </ion-col>
           </ion-row>
           <ion-row>
@@ -139,19 +142,81 @@
               <h2> Grand Total</h2>
             </ion-col>
             <ion-col>
-              <h2>{{grandAmount + total }}  Rs</h2>
+              <h2>{{grandAmount + total }} Rs</h2>
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col>
-                <button  ion-button full (click)="discount()">Discount</button>                
+              <button ion-button full (click)="discount()">Discount</button>
             </ion-col>
             <ion-col>
-              <button  ion-button full (click)="SaveOrder()">Save</button>
+              <button ion-button full (click)="SaveOrder()">Save</button>
             </ion-col>
             <ion-col>
-                <button  ion-button full (click)="Save()">Cancel</button>
-              </ion-col>
+              <button ion-button full (click)="Save()">Cancel</button>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <div class="square-container">               
+
+                <div class="square">
+                  <div class="keyboardKey">7</div>
+                </div>
+
+                <div class="square">
+                  <div class="keyboardKey">8</div>
+                </div>
+
+                <div class="square">
+                  <div class="keyboardKey">9</div>
+                </div>
+
+                <div class="square">
+                  <div class="keyboardKey">10</div>
+                </div>
+
+                <div class="square">
+                  <div class="keyboardKey">100</div>
+                </div>
+
+                <div class="square">
+                  <div class="keyboardKey">4</div>
+                </div>
+
+                <div class="square">
+                  <div class="keyboardKey">5</div>
+                </div>
+
+                <div class="square">
+                  <div class="keyboardKey">6</div>
+                </div>
+
+                <div class="square">
+                  <div class="keyboardKey">50</div>
+                </div>
+
+                <div class="square">
+                  <div class="keyboardKey">500</div>
+                </div>
+
+                <div class="square">
+                  <div class="keyboardKey">1</div>
+                </div>
+                <div class="square">
+                  <div class="keyboardKey">2</div>
+                </div>
+                <div class="square">
+                  <div class="keyboardKey">3</div>
+                </div>
+                <div class="square">
+                  <div class="keyboardKey">1000</div>
+                </div>
+                <div class="square">
+                  <div class="keyboardKey">5000</div>
+                </div>
+              </div>
+            </ion-col>
           </ion-row>
         </ion-grid>
       </ion-col>
