@@ -10,6 +10,8 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AdminPage } from '../pages/admin/admin';
 import { ProductAddPage } from '../pages/product-add/product-add';
+import { BillpopupPage } from '../pages/billpopup/billpopup';
+import { Printer } from '@ionic-native/printer/ngx';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,8 @@ import { ProductAddPage } from '../pages/product-add/product-add';
     HomePage,
     ListPage,
     AdminPage,
-    ProductAddPage
+    ProductAddPage,
+    BillpopupPage
   ],
   imports: [
     BrowserModule,
@@ -30,11 +33,13 @@ import { ProductAddPage } from '../pages/product-add/product-add';
     HomePage,
     ListPage,
     AdminPage,
-    ProductAddPage
+    ProductAddPage,
+    BillpopupPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
+    Printer,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

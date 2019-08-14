@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, ModalController } from 'ionic-angular';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
+
+import { BillpopupPage } from '../billpopup/billpopup';
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -100,7 +102,7 @@ export class HomePage {
   items;
   addeditems = [];
   selectedcategory = 1 ;
-  selectedProduct = {'price':'',"qty":'',"name":'',"productid":''};
+  selectedProduct = {'price':'',"qty":0,"name":'',"productid":''};
   total = 0;
   netQty = 0;
   netamount = 0;
@@ -108,7 +110,7 @@ export class HomePage {
   discountAmount = 0;
   products;
 
-  constructor(public navCtrl: NavController,private http: Http) {
+  constructor(public navCtrl: NavController,private http: Http,public modalCtrl: ModalController) {
     this.loaditems();
     this.selectCategory(1)
   }
@@ -133,31 +135,47 @@ export class HomePage {
       this.selectedProduct.productid = item._id;
       this.selectedProduct.name = item.Name;
       this.selectedProduct.price = item.Price;
+      this.selectedProduct.qty = 1;
       this.netQty += 1;
       this.addeditems.push(this.selectedProduct);
       var balance = parseFloat(this.selectedProduct.price) ;
       this.AddTotal(balance);
       
-      this.selectedProduct = {'price':'',"qty":'',"name":'',"productid":''};
+      this.selectedProduct = {'price':'',"qty":0,"name":'',"productid":''};
      // this.selectedProduct = item
   }
   selectCategory(categoryid){
       console.log(categoryid);
-    
-      this.items = this.itemcategories.product.filter(item =>{
-            return item.Category == categoryid;
-      })
+      this.items = [];
+
+      // this.products = this.itemcategories.product.filter(item =>{
+      //       return item.Category == categoryid;
+      // })
+      let url = ''+categoryid;
+      this.http.get('http://localhost:4000/api/productByCategoryId/'+ categoryid).subscribe(result => {
+      console.log(result);
+      if(result.status == 200){
+      let prod = JSON.parse(result['_body']);
+        if(prod.IsSucess){
+          this.products  = prod.data;
+
+        }
+      }
+      
+      console.log(this.products);
+    })
   }
   additem(){
     this.addeditems.push(this.selectedProduct);
-    var balance = parseFloat(this.selectedProduct.price) * parseFloat(this.selectedProduct.qty);
+    var balance = parseFloat(this.selectedProduct.price) * this.selectedProduct.qty;
     this.AddTotal(balance);
-    this.netQty += parseFloat(this.selectedProduct.qty);
-    this.selectedProduct = {'price':'',"qty":'',"name":'',"productid":''};
+    this.netQty += this.selectedProduct.qty;
+    this.selectedProduct = {'price':'',"qty":0,"name":'',"productid":''};
   }
   removeitems(){
     this.addeditems = [];
     this.total = 0;
+    this.netQty = 0;
   }
   AddTotal(value){
     this.total += value;
@@ -167,5 +185,13 @@ export class HomePage {
   }
   SaveOrder(){
       console.log(this.addeditems);
+    this.printInvoice();
+  }
+  printInvoice(){   
+      const modal = this.modalCtrl.create(BillpopupPage,{
+        orderItems:this.addeditems,
+        totals:this.total
+      });
+      modal.present();    
   }
 }

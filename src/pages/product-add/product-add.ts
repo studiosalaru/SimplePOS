@@ -78,7 +78,7 @@ export class ProductAddPage {
             if (result.IsSucess) {
               this.presentConfirm(result.Message);
             } else {
-              this.presentConfirm("Product Creation Fail")
+              this.presentConfirm("Product Not found")
             }
           }
           console.log(data['_body']);
@@ -111,7 +111,8 @@ export class ProductAddPage {
     this.http.get('http://localhost:4000/api/product').subscribe(result => {
       console.log(result);
       if(result['_body']){
-        this.products = JSON.parse(result['_body']);
+        let resultset =  JSON.parse(result['_body']);
+        this.products = resultset.data;
       }
     })
   }
