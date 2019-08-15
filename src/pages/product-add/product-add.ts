@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
+import { TransactionhandlerProvider } from '../../providers/transactionhandler/transactionhandler';
 
 /**
  * Generated class for the ProductAddPage page.
@@ -17,7 +18,8 @@ import 'rxjs/add/operator/map';
 })
 export class ProductAddPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+     private http: Http, private alertCtrl: AlertController,private transactionHandler:TransactionhandlerProvider) {
   }
   searchQuery: string = '';
 
@@ -53,7 +55,7 @@ export class ProductAddPage {
     this.productDTO.Price = item.Price;
     this.productDTO.Size = item.size;
   }
-  createProduct() {
+ async createProduct() {
 
     var headers = new Headers();
     headers.append("Accept", 'application/json');
@@ -70,8 +72,8 @@ export class ProductAddPage {
     }
 
     if (this.productDTO.Id != "") {
-      this.http.put("http://localhost:4000/api/product/" + this.productDTO.Id, postData, requestOptions)
-        .subscribe(data => {
+      let response = await this.transactionHandler.updateProduct(this.productDTO.Id,postData);
+      response.subscribe(data => {
           if (data['_body']) {
             let result = JSON.parse(data['_body']);
             console.log(result)
@@ -87,8 +89,8 @@ export class ProductAddPage {
           console.log(error);
         });
     } else {
-      this.http.post("http://localhost:4000/api/product", postData, requestOptions)
-        .subscribe(data => {
+      let response = await this.transactionHandler.addnewProduct(postData)
+      response.subscribe(data => {
           if (data['_body']) {
             let result = JSON.parse(data['_body']);
             console.log(result)
@@ -97,18 +99,22 @@ export class ProductAddPage {
             } else {
               this.presentConfirm("Product Creation Fail")
             }
+            this.loadallproduct();
           }
           console.log(data['_body']);
         }, error => {
           console.log(error);
           this.presentConfirm(error.message)
+          this.loadallproduct();
+
         });
     }
-    this.loadallproduct();
+   
 
   }
-  loadallproduct() {
-    this.http.get('http://localhost:4000/api/product').subscribe(result => {
+  async loadallproduct() {
+     let response = await this.transactionHandler.getAllProduct();
+    response.subscribe(result => {
       console.log(result);
       if(result['_body']){
         let resultset =  JSON.parse(result['_body']);
@@ -119,15 +125,11 @@ export class ProductAddPage {
   newProdut() {
     this.productDTO = { Name: '', Category: '', SubCategory: '', Price: '', Size: '', Id: '' };
   }
-  deleteProduct() {
+  async deleteProduct() {
     if(this.productDTO.Id != ""){
-      var headers = new Headers();
-    headers.append("Accept", 'application/json');
-    headers.append('Content-Type', 'application/json');
-    const requestOptions = new RequestOptions({ headers: headers });
 
-    this.http.delete("http://localhost:4000/api/product/" + this.productDTO.Id, requestOptions)
-      .subscribe(data => {
+    let response = await this.transactionHandler.deleteProduct(this.productDTO.Id);
+    response.subscribe(data => {
         if (data['_body']) {
           let result = JSON.parse(data['_body']);
           console.log(result)

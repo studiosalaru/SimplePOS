@@ -4,6 +4,7 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 import { BillpopupPage } from '../billpopup/billpopup';
+import { TransactionhandlerProvider } from '../../providers/transactionhandler/transactionhandler';
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -110,13 +111,14 @@ export class HomePage {
   discountAmount = 0;
   products;
 
-  constructor(public navCtrl: NavController,private http: Http,public modalCtrl: ModalController) {
+  constructor(public navCtrl: NavController,private http: Http,public modalCtrl: ModalController,private transactionHandler:TransactionhandlerProvider) {
     this.loaditems();
     this.selectCategory(1)
   }
   
-  loaditems(){
-    this.http.get('http://localhost:4000/api/product').subscribe(result => {
+  async loaditems(){
+    let products = await this.transactionHandler.getAllProduct()
+    products.subscribe(result => {
       console.log(result);
       if(result.status == 200){
       let prod = JSON.parse(result['_body']);
@@ -144,15 +146,13 @@ export class HomePage {
       this.selectedProduct = {'price':'',"qty":0,"name":'',"productid":''};
      // this.selectedProduct = item
   }
-  selectCategory(categoryid){
+  async selectCategory(categoryid){
       console.log(categoryid);
       this.items = [];
 
-      // this.products = this.itemcategories.product.filter(item =>{
-      //       return item.Category == categoryid;
-      // })
-      let url = ''+categoryid;
-      this.http.get('http://localhost:4000/api/productByCategoryId/'+ categoryid).subscribe(result => {
+     
+      let response = await this.transactionHandler.getProductByCategoryId(categoryid)
+      response.subscribe(result => {
       console.log(result);
       if(result.status == 200){
       let prod = JSON.parse(result['_body']);

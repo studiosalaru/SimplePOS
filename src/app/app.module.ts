@@ -12,6 +12,10 @@ import { AdminPage } from '../pages/admin/admin';
 import { ProductAddPage } from '../pages/product-add/product-add';
 import { BillpopupPage } from '../pages/billpopup/billpopup';
 import { Printer } from '@ionic-native/printer/ngx';
+import { TransactionhandlerProvider } from '../providers/transactionhandler/transactionhandler';
+import { ResourcesProvider } from '../providers/resources/resources';
+import { DataaccessProvider } from '../providers/dataaccess/dataaccess';
+import { StorageProvider } from '../providers/storage/storage';
 
 @NgModule({
   declarations: [
@@ -40,7 +44,11 @@ import { Printer } from '@ionic-native/printer/ngx';
     StatusBar,
     SplashScreen,
     Printer,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    TransactionhandlerProvider,
+    ResourcesProvider,
+    DataaccessProvider,
+    StorageProvider
   ]
 })
 export class AppModule {}

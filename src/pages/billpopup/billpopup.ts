@@ -5,6 +5,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import { Printer } from '@ionic-native/printer';
 import { AlertController } from 'ionic-angular';
+import { TransactionhandlerProvider } from '../../providers/transactionhandler/transactionhandler';
 /**
  * Generated class for the BillpopupPage page.
  *
@@ -22,10 +23,12 @@ export class BillpopupPage {
   total = 0;
   customerDetails:any = [];
   cash:any = [];
-  constructor(public navCtrl: NavController,public navParams: NavParams, private http: Http,private alertCtrl:AlertController) {
+  constructor(public navCtrl: NavController,public navParams: NavParams,
+    private transactionHandler:TransactionhandlerProvider,
+     private http: Http,private alertCtrl:AlertController) {
 
   }
-  saveorder() {
+  async saveorder() {
     let addedProduct = [];
     this.addedItems.forEach(items => {
       let orderitem = {
@@ -62,41 +65,55 @@ export class BillpopupPage {
       orderDetails:addedProduct
 
     };
-    var headers = new Headers();
-    headers.append("Accept", 'application/json');
-    headers.append('Content-Type', 'application/json');
-    const requestOptions = new RequestOptions({ headers: headers });
-    this.http.post("http://localhost:4000/api/order", postData, requestOptions)
-      .subscribe(data => {
-        if (data['_body']) {
-          let result = JSON.parse(data['_body']);
-          console.log(result)
-          if (result.IsSucess) {
-            console.log(result.data);
-            this.print(result.data.Header._id);
-            // this.presentConfirm(result.Message);
-          } else {
-            // this.presentConfirm("Product Creation Fail")
-          }
-        }
+
+    let response = await this.transactionHandler.saveorderAndPrint(postData);
+    response.subscribe((response)=>{
+      if (response['_body']) {
+        let result = JSON.parse(response['_body']);
+        console.log(result)
+        if (result.IsSucess) {
+          console.log(result.data);
+          this.print(result.data.Header._id);         
+        } else {
         
-      }, error => {
-        console.log(error);
-        // this.presentConfirm(error.message)
-      });
+        }
+      }
+    })
+    // var headers = new Headers();
+    // headers.append("Accept", 'application/json');
+    // headers.append('Content-Type', 'application/json');
+    // const requestOptions = new RequestOptions({ headers: headers });
+    // this.http.post("http://localhost:4000/api/order", postData, requestOptions)
+    //   .subscribe(data => {
+    //     if (data['_body']) {
+    //       let result = JSON.parse(data['_body']);
+    //       console.log(result)
+    //       if (result.IsSucess) {
+    //         console.log(result.data);
+    //         this.print(result.data.Header._id);
+           
+    //       } else {
+          
+    //       }
+    //     }
+        
+    //   }, error => {
+    //     console.log(error);
+       
+    //   });
   }
 
   print(orderid) {
     this.http.get('http://localhost:4000/api/print/recipt/'+orderid).subscribe(result => {
-      console.log(result);
-      if (result.status == 200) {
+      console.log(result);      
+    
         let prod = JSON.parse(result['_body']);
         if (prod.IsSucess) {
-          this.showAlert("Recipt ",prod.re)
+          this.showAlert("Recipt ",prod.Message)
           //this.products  = prod.data;
           console.log(prod.data);
         }
-      }
+      
 
       // console.log(this.products);
     })
