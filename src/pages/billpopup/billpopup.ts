@@ -79,6 +79,7 @@ export class BillpopupPage {
         }
       }
     })
+   
     // var headers = new Headers();
     // headers.append("Accept", 'application/json');
     // headers.append('Content-Type', 'application/json');
@@ -102,7 +103,9 @@ export class BillpopupPage {
        
     //   });
   }
-
+  CalculateBalance(){
+      this.cash.return = this.cash.recived - this.total;
+  }
   print(orderid) {
     this.http.get('http://localhost:4000/api/print/recipt/'+orderid).subscribe(result => {
       console.log(result);      

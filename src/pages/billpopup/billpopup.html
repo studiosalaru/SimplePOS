@@ -95,7 +95,10 @@
         <ion-row >
           <ion-col col-6>Amount Recived</ion-col>
           <ion-col col-6>
-            <ion-input type="number" [(ngModel)]="cash.recived" placeholder="Recived Amount"></ion-input>
+            <ion-input type="number"
+            (input)="CalculateBalance()"
+           
+             [(ngModel)]="cash.recived" placeholder="Recived Amount"></ion-input>
           </ion-col>
           <!-- <ion-col col-3>{{item.price}} </ion-col> -->
         </ion-row>
@@ -103,7 +106,9 @@
         <ion-row >
           <ion-col col-6>Amount Return</ion-col>
           <ion-col col-6>
-            <ion-input type="number" [(ngModel)]="cash.return" placeholder="Return Amount"></ion-input>
+            <ion-input type="number" 
+            [disabled]="true"
+            [(ngModel)]="cash.return" placeholder="Return Amount"></ion-input>
           </ion-col>
           <!-- <ion-col col-3>{{item.price}} </ion-col> -->
         </ion-row>
