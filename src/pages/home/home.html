@@ -85,23 +85,24 @@
           </ion-row>
           <ion-row>
             <ion-col>
-              <ion-list>
+              <ion-list style="max-height: 40vh;overflow: auto">
                 <ion-item>
                   <ion-row>
                     <ion-col col-4>Name</ion-col>
-                    <ion-col>Qty</ion-col>
-                    <ion-col>Price</ion-col>
+                    <ion-col col-2 >Qty</ion-col>
+                    <ion-col col-2>Price</ion-col>
                   </ion-row>
                 </ion-item>
                 <ion-item *ngFor="let item of addeditems">
                   <ion-row>
                     <ion-col col-4>{{item.name}}</ion-col>
-                    <ion-col>{{item.qty}}</ion-col>
-                    <ion-col>{{item.price}} RS</ion-col>
+                    <ion-col col-2 (click)="ChangeQuantity(item)">{{item.qty}}</ion-col>
+                    <ion-col col-2>{{item.netPrice}} RS</ion-col>\
+                    <ion-col>
+                      
+                    </ion-col>
                   </ion-row>
-
                 </ion-item>
-
               </ion-list>
             </ion-col>
           </ion-row>
@@ -156,68 +157,7 @@
               <button ion-button full (click)="Save()">Cancel</button>
             </ion-col>
           </ion-row>
-          <ion-row>
-            <ion-col>
-              <div class="square-container">               
-
-                <div class="square">
-                  <div class="keyboardKey">7</div>
-                </div>
-
-                <div class="square">
-                  <div class="keyboardKey">8</div>
-                </div>
-
-                <div class="square">
-                  <div class="keyboardKey">9</div>
-                </div>
-
-                <div class="square">
-                  <div class="keyboardKey">10</div>
-                </div>
-
-                <div class="square">
-                  <div class="keyboardKey">100</div>
-                </div>
-
-                <div class="square">
-                  <div class="keyboardKey">4</div>
-                </div>
-
-                <div class="square">
-                  <div class="keyboardKey">5</div>
-                </div>
-
-                <div class="square">
-                  <div class="keyboardKey">6</div>
-                </div>
-
-                <div class="square">
-                  <div class="keyboardKey">50</div>
-                </div>
-
-                <div class="square">
-                  <div class="keyboardKey">500</div>
-                </div>
-
-                <div class="square">
-                  <div class="keyboardKey">1</div>
-                </div>
-                <div class="square">
-                  <div class="keyboardKey">2</div>
-                </div>
-                <div class="square">
-                  <div class="keyboardKey">3</div>
-                </div>
-                <div class="square">
-                  <div class="keyboardKey">1000</div>
-                </div>
-                <div class="square">
-                  <div class="keyboardKey">5000</div>
-                </div>
-              </div>
-            </ion-col>
-          </ion-row>
+          
         </ion-grid>
       </ion-col>
     </ion-row>

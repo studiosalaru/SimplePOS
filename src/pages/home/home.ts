@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController } from 'ionic-angular';
+import { NavController, ModalController, AlertController } from 'ionic-angular';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 
@@ -103,7 +103,7 @@ export class HomePage {
   items;
   addeditems = [];
   selectedcategory = 1 ;
-  selectedProduct = {'price':'',"qty":0,"name":'',"productid":''};
+  selectedProduct = {'price':'',"qty":0,"name":'',"productid":'','netPrice':0};
   total = 0;
   netQty = 0;
   netamount = 0;
@@ -111,7 +111,10 @@ export class HomePage {
   discountAmount = 0;
   products;
 
-  constructor(public navCtrl: NavController,private http: Http,public modalCtrl: ModalController,private transactionHandler:TransactionhandlerProvider) {
+  constructor(public navCtrl: NavController,
+    private http: Http,
+    private alertCtrl:AlertController,
+    public modalCtrl: ModalController,private transactionHandler:TransactionhandlerProvider) {
     this.loaditems();
     this.selectCategory(1)
   }
@@ -138,12 +141,13 @@ export class HomePage {
       this.selectedProduct.name = item.Name;
       this.selectedProduct.price = item.Price;
       this.selectedProduct.qty = 1;
+      this.selectedProduct.netPrice =parseFloat(this.selectedProduct.price) * this.selectedProduct.qty; 
       this.netQty += 1;
       this.addeditems.push(this.selectedProduct);
-      var balance = parseFloat(this.selectedProduct.price) ;
-      this.AddTotal(balance);
+     // var balance = parseFloat(this.selectedProduct.price) ;
+      this.AddTotal(this.selectedProduct.netPrice );
       
-      this.selectedProduct = {'price':'',"qty":0,"name":'',"productid":''};
+      this.selectedProduct = {'price':'',"qty":0,"name":'',"productid":'','netPrice':0};
      // this.selectedProduct = item
   }
   async selectCategory(categoryid){
@@ -166,11 +170,12 @@ export class HomePage {
     })
   }
   additem(){
+    this.selectedProduct.netPrice =parseFloat(this.selectedProduct.price) * this.selectedProduct.qty; 
     this.addeditems.push(this.selectedProduct);
     var balance = parseFloat(this.selectedProduct.price) * this.selectedProduct.qty;
     this.AddTotal(balance);
     this.netQty += this.selectedProduct.qty;
-    this.selectedProduct = {'price':'',"qty":0,"name":'',"productid":''};
+    this.selectedProduct = {'price':'',"qty":0,"name":'',"productid":'','netPrice':0};
   }
   removeitems(){
     this.addeditems = [];
@@ -193,5 +198,43 @@ export class HomePage {
         totals:this.total
       });
       modal.present();    
+  }
+  ChangeQuantity(item) {
+    const prompt = this.alertCtrl.create({
+      title: 'Quantity',
+      message: "Enter Product Quantity",
+      inputs: [
+        {
+          name: 'qty',
+          placeholder: 'Qty',
+          value:item.qty
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Save',
+          handler: data => {
+            console.log('Saved clicked');
+            let itemIndex = this.addeditems.indexOf(item);
+            this.addeditems[itemIndex].qty = data.qty;
+            this.addeditems[itemIndex].netPrice = data.qty*this.addeditems[itemIndex].price;
+            this.total = 0;
+            this.addeditems.forEach(element => {
+              this.total += element.netPrice
+            });
+          }
+        }
+      ]
+    });
+    prompt.present();
+  }
+  updateQty(){
+
   }
 }
